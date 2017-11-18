@@ -1,4 +1,4 @@
-package org.prodscan.database.model.tools.annotation
+package org.prodscan.database.tools.annotation
 
 
 @Target(AnnotationTarget.CLASS)
