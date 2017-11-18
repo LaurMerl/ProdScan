@@ -13,6 +13,7 @@ import org.prodscan.database.model.State
 import org.prodscan.database.tools.DBHelper
 import org.prodscan.database.tools.Database
 import java.util.*
+import android.widget.Button
 
 class MainPage : AppCompatActivity() {
 
