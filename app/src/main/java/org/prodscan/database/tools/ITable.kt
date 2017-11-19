@@ -1,7 +1,8 @@
 package org.prodscan.database.tools
 
-/**
- * Created by marcobedulli on 18/11/2017.
- */
+
 interface ITable {
+    fun Insert():DbStatus;
+    fun Update():DbStatus;
+    fun Delete():DbStatus;
 }
