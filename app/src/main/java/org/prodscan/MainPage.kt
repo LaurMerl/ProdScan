@@ -25,13 +25,12 @@ class MainPage : AppCompatActivity() {
 
         var acq = Acquisition(c,State.IN_PROGRESS)
         acq.Insert()
-        var p = Product(123123)
-        p.Insert()
+//        var p = Product(123123)
+//        p.Insert()
 
-        var scam = Scan(1323,p.code)
+        var scam = Scan(1323,21321)
         scam.Insert()
-        scam.Delete()
-        scam.Update()
+        val ni  = Database.db!!.update(scam)
 
     }
 }

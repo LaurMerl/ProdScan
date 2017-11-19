@@ -27,8 +27,8 @@ data class Scan (var quantity: Int,var product: Long): ITable {
         return DbStatus.SUCCESS    }
 
     override fun Update(): DbStatus {
-        DbStatus.FAIL
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        if(Database.db!!.update(this)>0 ) return DbStatus.SUCCESS
+        return DbStatus.FAIL
     }
 
     override fun Delete(): DbStatus {

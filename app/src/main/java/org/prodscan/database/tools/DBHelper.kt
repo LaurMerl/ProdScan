@@ -19,6 +19,7 @@ import kotlin.reflect.KMutableProperty
 import kotlin.reflect.full.createInstance
 import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.full.findAnnotation
+import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.jvmErasure
 
 class DBHelper: SQLiteOpenHelper {
@@ -53,6 +54,16 @@ class DBHelper: SQLiteOpenHelper {
            return cursorToObjList(c as Cursor,table)
 
         return ArrayList()
+    }
+
+    fun update(table:ITable):Int{
+        val inf = insertQueryGenerator(table)
+        val idp = table::class.memberProperties.filter { x->x.findAnnotation<Id>()!=null &&  x.findAnnotation<Column>()!=null}.first()
+        val ann = idp.findAnnotation<Column>()
+
+        Log.d("Database","${ann!!.name} = ${idp.getter.call(table)}")
+
+        return this.writableDatabase.update(inf.tableName,inf.values,"${ann!!.name} = ${idp.getter.call(table)}",null)
     }
 
     private fun <T:Any> cursorToObjList(c:Cursor,table:KClass<T>):List<T>{

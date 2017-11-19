@@ -9,7 +9,7 @@ import java.util.*
 import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.full.findAnnotation
 
-class InsertInfo(val tableName:String,val values:ContentValues ) {
+data class InsertInfo(val tableName:String,val values:ContentValues ) {
 
 }
 
@@ -48,3 +48,4 @@ fun insertQueryGenerator(table: ITable):InsertInfo{
     return InsertInfo(tableName,c)
 
 }
+
