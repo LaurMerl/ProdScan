@@ -6,16 +6,22 @@ import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.widget.Button
+import android.widget.MultiAutoCompleteTextView
 import android.widget.TextView
 import android.widget.Toast
 
 import kotlinx.android.synthetic.main.activity_scan_page.*
 import org.prodscan.database.GetAndInsertIfNotExist
+import org.prodscan.database.SelectAll
 import org.prodscan.database.model.Acquisition
 import org.prodscan.database.model.Product
 import org.prodscan.database.model.Scan
 import org.prodscan.database.model.State
 import org.prodscan.database.tools.DbStatus
+import android.widget.ArrayAdapter
+import java.util.*
+import kotlin.concurrent.timerTask
+
 
 class ScanPage : AppCompatActivity() {
 
@@ -25,7 +31,7 @@ class ScanPage : AppCompatActivity() {
         setSupportActionBar(toolbar)
         getSupportActionBar()?.setDisplayHomeAsUpEnabled(true)
 
-        val product_code = findViewById<TextView>(R.id.ProductCodeText)
+        val product_code = findViewById<MultiAutoCompleteTextView>(R.id.ProductCodeText)
         val product_quantity = findViewById<TextView>(R.id.QuantityText)
         val exit_button = findViewById<Button>(R.id.ExitButton)
 
@@ -33,6 +39,7 @@ class ScanPage : AppCompatActivity() {
         val acquisition = Acquisition()
         acquisition.Insert()
 
+        // Checks the values of input is not null or empty
         fun checkTextValues(value:TextView): Boolean {
             if(value?.text.isNullOrEmpty()) {
                 value?.setError("Campo vuoto")
@@ -41,6 +48,7 @@ class ScanPage : AppCompatActivity() {
             return true
         }
 
+        // Checks the quantity has lenght < 3
         fun checkQuantity(value:TextView): Boolean {
             Log.d("checkQuantity", value?.text.toString())
             if(value?.text.length > 3) {
@@ -51,16 +59,32 @@ class ScanPage : AppCompatActivity() {
             return true
         }
 
-        findViewById<Button>(R.id.SendButton).setOnClickListener { view ->
-            if(checkTextValues(product_code) && ((checkTextValues(product_quantity)) && (checkQuantity(product_quantity)))) {
+        fun suggestions() {
+            // Get all the product form the product table
+            val codesList = SelectAll(Product::class).map { x -> x.ProductCode }
 
+            val adapter = ArrayAdapter<String>(this,
+                    R.layout.activity_scan_page, codesList)
+            product_code.threshold = 3
+            product_code.setAdapter(adapter)
+            Log.d("products", codesList.size.toString())
+        }
+
+        // Get all the product form the product table
+        suggestions()
+
+        findViewById<Button>(R.id.SendButton).setOnClickListener { view ->
+
+            // Get all the product form the product table
+            suggestions()
+            if(checkTextValues(product_code) && ((checkTextValues(product_quantity)) && (checkQuantity(product_quantity)))) {
                 // Create a product prototype
                 val productPrototype = Product(product_code.text.toString())
                 // Insert and get a new product from the product table
                 val product = GetAndInsertIfNotExist(productPrototype, { c -> productPrototype.ProductCode == c.ProductCode })
 
                 // Create a product prototype
-                val scan = Scan((product_quantity.text.toString()).toInt(), product.id, acquisition)
+                val scan = Scan((product_quantity.text.toString()).toInt(), product.id, acquisition.id)
                 // Insert in the product into scan_product table
                 val status = scan.Insert()
 
@@ -80,13 +104,25 @@ class ScanPage : AppCompatActivity() {
             }
         }
 
-        exit_button.setOnClickListener {
+        exit_button.setOnClickListener { view ->
             // Change the acquisition state to complete
             acquisition.state = State.COMPLETED
-            acquisition.Update()
+            val result = acquisition.Update()
+
+            when (result) {
+                DbStatus.FAIL -> {
+                    Snackbar.make(view, "ERRORE: acquisizione fallita. Riprova.", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show()
+                }
+
+                DbStatus.SUCCESS -> {
+                    Snackbar.make(view, "Acquisizione terminata con successo.", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show()
+                }
+            }
 
             val intent = Intent(this, MainPage::class.java)
-            startActivity(intent);
+            Timer().schedule(timerTask { startActivity(intent) }, 2000)
         }
     }
 
