@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ProdScan</string>
+    <string name="title_activity_scan_page">ScanPage</string>
 </resources>

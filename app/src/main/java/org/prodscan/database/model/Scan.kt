@@ -10,7 +10,7 @@ import org.prodscan.database.tools.annotation.Relation
 import org.prodscan.database.tools.annotation.Table
 
 @Table(name = "Scan")
-data class Scan (var quantity: Int,var product: Long): ITable {
+data class Scan (var quantity: Int,var product: Long, var acquisition: Long): ITable {
     var id:Long = -1L;
 
     override fun Insert(): DbStatus {
@@ -37,7 +37,7 @@ data class Scan (var quantity: Int,var product: Long): ITable {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    constructor():this(quantity=-1,product = -1)
+    constructor():this(quantity=-1,product = -1,acquisition = -1)
 
     @Column(name = "quantity" ,type = "INTEGER")
     var ScanQuantity: Int
@@ -49,10 +49,14 @@ data class Scan (var quantity: Int,var product: Long): ITable {
         get() = this.product
         set(value){this.product = value}
 
+    @Column(name = "acquisition" ,type = "INTEGER")
+    var ScanAcquisition: Long
+        get() = this.acquisition
+        set(value){this.acquisition = value}
+
 
     @Id(autoInc = true)
     @Column(name="id",type = "INTEGER")
-
     var ScanId: Long
         get() = this.id
         set(value){this.id = value}
