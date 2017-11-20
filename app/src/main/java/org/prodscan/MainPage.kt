@@ -13,7 +13,6 @@ import org.prodscan.database.model.State
 import org.prodscan.database.tools.DBHelper
 import org.prodscan.database.tools.Database
 import java.util.*
-import android.widget.Button
 
 class MainPage : AppCompatActivity() {
 
@@ -28,19 +27,7 @@ class MainPage : AppCompatActivity() {
             startActivity(intent);
         }
 
+        // Initialisation on the DB
         InitDatabase(this)
-
-        val c = Calendar.getInstance().time;
-        val c1 = Scan(12,12).ScanProduct
-
-        var acq = Acquisition(c,State.IN_PROGRESS)
-        acq.Insert()
-//        var p = Product(123123)
-//        p.Insert()
-
-        var scam = Scan(1323,21321)
-        scam.Insert()
-        val ni  = Database.db!!.update(scam)
-
     }
 }
