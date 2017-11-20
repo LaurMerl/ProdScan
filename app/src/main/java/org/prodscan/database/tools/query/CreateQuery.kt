@@ -2,6 +2,7 @@ package org.prodscan.database.tools.query
 
 import org.prodscan.database.tools.annotation.Column
 import org.prodscan.database.tools.annotation.Id
+import org.prodscan.database.tools.annotation.Unique
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty1
 import kotlin.reflect.full.declaredMemberProperties
@@ -36,6 +37,8 @@ private fun <T>convertToColumnDefinition(property: KProperty1<T, *>):String{
         }
     }
 
-    return "${columnAnnotation!!.name} ${columnAnnotation!!.type} ${idAnnotation}"
+    val unique = if (property.findAnnotation<Unique>()!=null)  "UNIQUE"  else ""
+
+    return "${columnAnnotation!!.name} ${columnAnnotation!!.type} ${unique} ${idAnnotation}"
 }
 

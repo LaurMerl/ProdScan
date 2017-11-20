@@ -9,11 +9,13 @@ import org.prodscan.database.tools.annotation.Table
 
 
 @Table(name = "Product")
-data class Product (var code: Long):ITable{
+data class Product (var code: String):ITable{
+    var id:Long = -1
+
     override fun Insert(): DbStatus {
                 val nId = Database.db?.insert(this)
                 if (nId != null)
-                    code = nId
+                    id = nId
                 else{
                     return DbStatus.FAIL
                 }
@@ -31,11 +33,17 @@ data class Product (var code: Long):ITable{
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    constructor():this(code=-1)
+    constructor():this(code="-1")
 
-    @Id(autoInc = false)
-    @Column(name="id",type = "INTEGER")
-    var ProductCode: Long
+    @Column(name="code",type = "TEXT")
+    var ProductCode: String
         get() = this.code
         set(value){this.code = value}
+
+
+    @Id(autoInc = true)
+    @Column(name="id",type = "INTEGER")
+    var ProductId: Long
+        get() = this.id
+        set(value){this.id = value}
 }
