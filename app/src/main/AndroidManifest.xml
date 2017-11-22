@@ -19,7 +19,9 @@
         <activity
             android:name=".ScanPage"
             android:label="@string/title_activity_scan_page"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".AcquisitionListPage" />
+        <activity android:name=".ActivityProductList"></activity>
     </application>
 
 </manifest>
