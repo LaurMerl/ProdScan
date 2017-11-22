@@ -6,6 +6,12 @@
     android:layout_height="match_parent"
     tools:context="org.prodscan.ScanPage">
 
+    <MultiAutoCompleteTextView
+        android:id="@+id/multiAutoCompleteTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="MultiAutoCompleteTextView" />
+
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,7 +26,9 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_scan_page" />
+    <include
+        android:id="@+id/contentScanPage"
+        layout="@layout/content_scan_page" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
