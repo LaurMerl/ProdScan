@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import org.prodscan.database.InitDatabase
+import org.prodscan.soap.*
 
 class MainPage : AppCompatActivity() {
 
@@ -26,5 +27,7 @@ class MainPage : AppCompatActivity() {
         }
         // Initialisation on the DB
         InitDatabase(this)
+        val c = RunAsync<HelloWorld,HelloWorldResponse>(WebServiceSoap()::HelloWorld).execute(HelloWorld()).get()
+        println(c.HelloWorldResult)
     }
 }
